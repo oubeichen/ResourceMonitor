@@ -15,22 +15,26 @@ public class Cameramonitor implements IXposedHookLoadPackage {
         findAndHookMethod("android.hardware.Camera", lpparam.classLoader, "open", new XC_MethodHook() {
         	@Override
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-        		XposedBridge.log("Started camera: " + lpparam.packageName);
+        		long time=System.currentTimeMillis();
+        		XposedBridge.log("Started camera: " + lpparam.packageName  + " at time: " + time);
             }
         	@Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-        		XposedBridge.log("Started camera2: " + lpparam.packageName);
+        		long time=System.currentTimeMillis();
+        		XposedBridge.log("Started camera2: " + lpparam.packageName  + " at time: " + time);
             }
         });
         
         findAndHookMethod("android.hardware.Camera", lpparam.classLoader, "release", new XC_MethodHook() {
         	@Override
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-        		XposedBridge.log("Stopped camera: " + lpparam.packageName);
+        		long time=System.currentTimeMillis();
+        		XposedBridge.log("Stopped camera: " + lpparam.packageName  + " at time: " + time);
             }
         	@Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-        		XposedBridge.log("Stopped camera2: " + lpparam.packageName);
+        		long time=System.currentTimeMillis();
+        		XposedBridge.log("Stopped camera2: " + lpparam.packageName  + " at time: " + time);
             }
         });
     }
