@@ -25,6 +25,13 @@
         <meta-data android:value="true" android:name="xposedmodule"/>
         <meta-data android:value="A resource monitor" android:name="xposeddescription"/>
         <meta-data android:value="54" android:name="xposedminversion"/>
+        <service android:name="Monitorservice"></service>
+        <receiver android:name="Bootreceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <category android:name="android.intent.category.HOME" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
