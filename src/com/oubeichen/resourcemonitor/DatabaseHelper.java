@@ -41,7 +41,7 @@ public class DatabaseHelper{
         while (c.moveToNext()) { 
             packagename = c.getString(c.getColumnIndex("packagename"));
             usage = c.getLong(c.getColumnIndex("usage"));
-            String string = "" + packagename + " \t" + usage;
+            String string = "" + packagename + " \t" + usage + "ms";
             list.add(string);    
         }  
         c.close();

@@ -14,14 +14,15 @@ import android.widget.ListView;
 
 public class MainActivity extends Activity implements OnClickListener {
 
-	ListView mListView;
-	Button clearBtn; 
-	
+	private ListView mListView;
+	private Button clearBtn; 
+	private List<String> list;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		mListView=new ListView(this);
+		mListView = (ListView)findViewById(R.id.camera_usage_list);
 		selectDB();
 		btnInit();
 		
@@ -39,6 +40,9 @@ public class MainActivity extends Activity implements OnClickListener {
 		case R.id.clear_button:
 			DatabaseHelper dbHelper = new DatabaseHelper();
 			dbHelper.clear();
+			list.clear();
+	        ArrayAdapter<String> adapter=new ArrayAdapter<String>(this, android.R.layout.simple_expandable_list_item_1,list);
+	        mListView.setAdapter(adapter);
 			break;
 		}
 	}
@@ -47,7 +51,7 @@ public class MainActivity extends Activity implements OnClickListener {
     	DatabaseHelper dbHelper = new DatabaseHelper();
 
     	//camera usage
-    	List<String> list = dbHelper.selectAll("camerausage");
+    	list = dbHelper.selectAll("camerausage");
         ArrayAdapter<String> adapter=new ArrayAdapter<String>(this, android.R.layout.simple_expandable_list_item_1,list);
         mListView.setAdapter(adapter);
     }
