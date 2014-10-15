@@ -25,6 +25,7 @@
         <meta-data android:value="true" android:name="xposedmodule"/>
         <meta-data android:value="A resource monitor" android:name="xposeddescription"/>
         <meta-data android:value="54" android:name="xposedminversion"/>
+        <service android:name="UpdateDBService"></service>
     </application>
 
 </manifest>

@@ -31,6 +31,15 @@ public class Cameramonitor implements IXposedHookLoadPackage {
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
         		long time=System.currentTimeMillis();
         		XposedBridge.log("Started camera: " + lpparam.packageName  + " at time: " + time);
+				Bundle bundle = new Bundle();
+				bundle.putString("type", "insert");
+				bundle.putString("table", "camerausage");
+				bundle.putString("packagename", lpparam.packageName);
+				bundle.putLong("time", time);
+				
+				Intent intent = new Intent(ContextUtil.getInstance(), UpdateDBService.class);
+				intent.putExtras(bundle);
+				ContextUtil.getInstance().startService(intent);
             }
         	@Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
@@ -49,6 +58,15 @@ public class Cameramonitor implements IXposedHookLoadPackage {
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
         		long time=System.currentTimeMillis();
         		XposedBridge.log("Stopped camera2: " + lpparam.packageName  + " at time: " + time);
+				Bundle bundle = new Bundle();
+				bundle.putString("type", "update");
+				bundle.putString("table", "camerausage");
+				bundle.putString("packagename", lpparam.packageName);
+				bundle.putLong("time", time);
+				
+				Intent intent = new Intent(ContextUtil.getInstance(), UpdateDBService.class);
+				intent.putExtras(bundle);
+				ContextUtil.getInstance().startService(intent);
             }
         });
     }
