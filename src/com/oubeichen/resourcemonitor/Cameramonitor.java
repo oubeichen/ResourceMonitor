@@ -3,9 +3,6 @@ package com.oubeichen.resourcemonitor;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import java.lang.reflect.Method;
 
-import android.content.Intent;
-import android.os.Bundle;
-
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
@@ -35,9 +32,9 @@ public class CameraMonitor implements IXposedHookLoadPackage {
         		XposedBridge.log("Started camera: " + lpparam.packageName  + " at time: " + time);
         		
         		//open and update database
-        		//DatabaseHelper dbHelper = new DatabaseHelper(ContextUtil.getInstance());
-        		//dbHelper.getWritableDatabase();
-        		//dbHelper.insert("camerausage", lpparam.packageName, time);
+        		DatabaseHelper dbHelper = new DatabaseHelper();
+        		dbHelper.getWritableDatabase();
+        		dbHelper.insert("camerausage", lpparam.packageName, time);
         		
             }
         	@Override
@@ -58,11 +55,10 @@ public class CameraMonitor implements IXposedHookLoadPackage {
         		XposedBridge.log("Stopped camera2: " + lpparam.packageName  + " at time: " + time);
         		
         		//open and update database
-        		//DatabaseHelper dbHelper = new DatabaseHelper(ContextUtil.getInstance());
-        		//dbHelper.getWritableDatabase();
-        		//dbHelper.update("camerausage", lpparam.packageName, time);
+        		DatabaseHelper dbHelper = new DatabaseHelper();
+        		dbHelper.getWritableDatabase();
+        		dbHelper.update("camerausage", lpparam.packageName, time);
         		
-				XposedBridge.log(ContextUtil.getInstance().toString());
             }
         });
     }

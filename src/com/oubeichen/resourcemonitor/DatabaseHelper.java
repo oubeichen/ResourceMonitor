@@ -1,34 +1,26 @@
 package com.oubeichen.resourcemonitor;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteDatabase.CursorFactory;
-import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Environment;
 
-public class DatabaseHelper extends SQLiteOpenHelper {
+public class DatabaseHelper{
 
-	public DatabaseHelper(Context context, String name, CursorFactory factory,
-			int version) {
-		super(context, name, factory, version);
-		// TODO Auto-generated constructor stub
-	}
-	public DatabaseHelper(Context context){
-		super(context, "usagedata", null, 1);
+	public DatabaseHelper(){
+		onCreate(getWritableDatabase());
 	}
 
-	@Override
 	public void onCreate(SQLiteDatabase db) {
 		// TODO Auto-generated method stub
         db.execSQL("CREATE TABLE IF NOT EXISTS camerausage (id INTEGER PRIMARY KEY AUTOINCREMENT, packagename VARCHAR, lastexecuted BIGINT, usage BIGINT)");
 	}
 
-	@Override
-	public void onUpgrade(SQLiteDatabase db, int oldver, int newver) {
+	public void onUpgrade(SQLiteDatabase db) {
 		// TODO Auto-generated method stub
         db.execSQL("DROP TABLE IF EXISTS camerausage");
         onCreate(db);
@@ -124,4 +116,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
         return ret;
     }
+    
+    public SQLiteDatabase getReadableDatabase()
+    {
+        database = SQLiteDatabase.openOrCreateDatabase(DATABASE_FILE_PATH
+                + File.separator + DATABASE_NAME, null);
+        return database;
+    }
+
+    public SQLiteDatabase getWritableDatabase()
+    {
+        database = SQLiteDatabase.openOrCreateDatabase(DATABASE_FILE_PATH
+                + File.separator + DATABASE_NAME, null);
+        return database;
+    }
+    
+    public static final String DATABASE_FILE_PATH = Environment.getExternalStorageDirectory().getAbsolutePath();
+    public static final String DATABASE_NAME = "resourcemonitor.db";
+    private SQLiteDatabase database;
 }
