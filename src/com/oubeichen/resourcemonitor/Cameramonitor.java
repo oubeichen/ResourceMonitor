@@ -1,45 +1,44 @@
 package com.oubeichen.resourcemonitor;
 
-import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
-import java.lang.reflect.Member;
 import java.lang.reflect.Method;
+
+import android.content.Intent;
+import android.os.Bundle;
+
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
-public class Cameramonitor implements IXposedHookLoadPackage {
+public class CameraMonitor implements IXposedHookLoadPackage {
 	
+	//frameworks/base/core/java/android/hardware/Camera.java
 	//http://developer.android.com/reference/android/hardware/Camera.html
 
     public void handleLoadPackage(final LoadPackageParam lpparam) throws Throwable {
 
     	Class<?> hookClass = null;
+    	Method open = null,release = null;
     	try{
     		hookClass = findClass("android.hardware.Camera", lpparam.classLoader);
+    		open = hookClass.getDeclaredMethod("startPreview");
+        	release = hookClass.getDeclaredMethod("stopPreview");
     	}catch (Throwable ex) {
-    		XposedBridge.log("Class not found");
-
+    		XposedBridge.log("Class or method not found");
 		}
-    	for (Method method : hookClass.getDeclaredMethods()){
-    		XposedBridge.log(method.getName());
-    	}
-    	Method open = hookClass.getDeclaredMethod("open");
+    	
     	XposedBridge.hookMethod(open, new XC_MethodHook() {
         	@Override
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
         		long time=System.currentTimeMillis();
         		XposedBridge.log("Started camera: " + lpparam.packageName  + " at time: " + time);
-				Bundle bundle = new Bundle();
-				bundle.putString("type", "insert");
-				bundle.putString("table", "camerausage");
-				bundle.putString("packagename", lpparam.packageName);
-				bundle.putLong("time", time);
-				
-				Intent intent = new Intent(ContextUtil.getInstance(), UpdateDBService.class);
-				intent.putExtras(bundle);
-				ContextUtil.getInstance().startService(intent);
+        		
+        		//open and update database
+        		//DatabaseHelper dbHelper = new DatabaseHelper(ContextUtil.getInstance());
+        		//dbHelper.getWritableDatabase();
+        		//dbHelper.insert("camerausage", lpparam.packageName, time);
+        		
             }
         	@Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
@@ -47,7 +46,6 @@ public class Cameramonitor implements IXposedHookLoadPackage {
         		XposedBridge.log("Started camera2: " + lpparam.packageName  + " at time: " + time);
             }
         });
-    	Method release = hookClass.getDeclaredMethod("release");
     	XposedBridge.hookMethod(release, new XC_MethodHook() {
         	@Override
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
@@ -58,15 +56,13 @@ public class Cameramonitor implements IXposedHookLoadPackage {
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
         		long time=System.currentTimeMillis();
         		XposedBridge.log("Stopped camera2: " + lpparam.packageName  + " at time: " + time);
-				Bundle bundle = new Bundle();
-				bundle.putString("type", "update");
-				bundle.putString("table", "camerausage");
-				bundle.putString("packagename", lpparam.packageName);
-				bundle.putLong("time", time);
-				
-				Intent intent = new Intent(ContextUtil.getInstance(), UpdateDBService.class);
-				intent.putExtras(bundle);
-				ContextUtil.getInstance().startService(intent);
+        		
+        		//open and update database
+        		//DatabaseHelper dbHelper = new DatabaseHelper(ContextUtil.getInstance());
+        		//dbHelper.getWritableDatabase();
+        		//dbHelper.update("camerausage", lpparam.packageName, time);
+        		
+				XposedBridge.log(ContextUtil.getInstance().toString());
             }
         });
     }
