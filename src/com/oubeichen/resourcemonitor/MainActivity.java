@@ -37,14 +37,14 @@ public class MainActivity extends Activity implements OnClickListener {
 		// TODO Auto-generated method stub
 		switch(v.getId()){
 		case R.id.clear_button:
-			DatabaseHelper dbHelper = new DatabaseHelper(ContextUtil.getInstance());
+			DatabaseHelper dbHelper = new DatabaseHelper();
 			dbHelper.clear();
 			break;
 		}
 	}
 
     public void selectDB(){
-    	DatabaseHelper dbHelper = new DatabaseHelper(ContextUtil.getInstance());
+    	DatabaseHelper dbHelper = new DatabaseHelper();
 
     	//camera usage
     	List<String> list = dbHelper.selectAll("camerausage");
