@@ -2,7 +2,8 @@
 <resources>
 
     <string name="app_name">ResourceMonitor</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="camera_usage">Camera Usage</string>
     <string name="action_settings">Settings</string>
+    <string name="camera_button">Clear</string>
 
 </resources>

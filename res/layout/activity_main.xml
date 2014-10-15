@@ -9,8 +9,27 @@
     tools:context="com.oubeichen.resourcemonitor.MainActivity" >
 
     <TextView
+        android:id="@+id/camera_usage_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+        android:text="@string/camera_usage" />
+
+    <ListView
+        android:id="@+id/camera_usage_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/camera_usage_text"
+        android:layout_above="@+id/clear_button"
+        android:layout_below="@+id/camera_usage_text" >
+
+    </ListView>
+
+    <Button
+        android:id="@+id/clear_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/camera_usage_text"
+        android:layout_alignParentBottom="true"
+        android:text="@string/camera_button" />
 
 </RelativeLayout>
