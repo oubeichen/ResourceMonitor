@@ -23,10 +23,20 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <data android:mimeType="vnd.android.cursor.dir/com.oubeichen.resourcemonitor" />
+            </intent-filter>
+            <intent-filter>
+                <data android:mimeType="vnd.android.cursor.item/com.oubeichen.resourcemonitor" />
+            </intent-filter>
+
         </activity>
+        <activity android:name="CameraMonitor"></activity>
         <meta-data android:value="true" android:name="xposedmodule"/>
         <meta-data android:value="A resource monitor" android:name="xposeddescription"/>
         <meta-data android:value="54" android:name="xposedminversion"/>
+        <provider android:name=".UsageProvider" android:authorities="com.oubeichen.resourcemonitor" android:exported="true"/>
+
     </application>
 
 </manifest>

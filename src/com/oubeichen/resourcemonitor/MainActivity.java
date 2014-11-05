@@ -1,8 +1,11 @@
 package com.oubeichen.resourcemonitor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,6 +20,8 @@ public class MainActivity extends Activity implements OnClickListener {
     private ListView mListView;
     private Button clearBtn;
     private List<String> list;
+    
+    public static final Uri CONTENT_URI = Uri.parse("content://com.oubeichen.resourcemonitor/camerausage");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,9 +47,8 @@ public class MainActivity extends Activity implements OnClickListener {
     }
 
     private void selectDB() {
-        DatabaseHelper dbHelper = new DatabaseHelper();
         // camera usage
-        list = dbHelper.selectAll("camerausage");
+        list = selectAll("camerausage");
         updateView();
     }
 
@@ -55,7 +59,7 @@ public class MainActivity extends Activity implements OnClickListener {
 
     private void updateView() {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_expandable_list_item_1, list);
+                android.R.layout.simple_list_item_1, list);
         mListView.setAdapter(adapter);
     }
 
@@ -76,6 +80,42 @@ public class MainActivity extends Activity implements OnClickListener {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * return all usage data
+     * 
+     * @param table
+     * @return
+     */
+    public List<String> selectAll(String table) {
+        int ID;
+        String packagename;
+        String methodname;
+        int type;
+        String time;
+
+        Cursor c = getContentResolver().query(CONTENT_URI, new String[] {
+                UsageLog.Camera._ID,
+                UsageLog.Camera.PACKAGENAME, UsageLog.Camera.METHODNAME, UsageLog.Camera.TYPE,
+                UsageLog.Camera.TIME },
+                null, null, null);
+        List<String> list = new ArrayList<String>();
+        while (c.moveToNext()) {
+            ID = c.getInt(c.getColumnIndex(UsageLog.Camera._ID));
+            packagename = c.getString(c.getColumnIndex(UsageLog.Camera.PACKAGENAME));
+            methodname = c.getString(c.getColumnIndex(UsageLog.Camera.METHODNAME));
+            type = c.getInt(c.getColumnIndex(UsageLog.Camera.TYPE));
+            time = c.getString(c.getColumnIndex(UsageLog.Camera.TIME));
+            String string = ID + " \t"
+                    + packagename +" \t"
+                    + methodname + " \t"
+                    + type + " \t" +
+                    time;
+            list.add(string);
+        }
+        c.close();
+        return list;
     }
 
 }
