@@ -42,8 +42,8 @@ public class UsageProvider extends ContentProvider {
         int count = 0;
         switch (sMatcher.match(uri)) {
         case CAMERA:
-                count = db.delete(UsageLog.Camera.TNAME, where, whereArgs);
-                break;
+            count = db.delete(UsageLog.Camera.TNAME, where, whereArgs);
+            break;
         case CAMERA_ID:
             String id = uri.getPathSegments().get(1);
             count = db.delete(UsageLog.Camera.TNAME, UsageLog.Camera._ID
@@ -53,9 +53,10 @@ public class UsageProvider extends ContentProvider {
                             : ""), whereArgs);
             break;
         default:
-                throw new IllegalArgumentException("Unknown URI "+uri);
+            throw new IllegalArgumentException("Unknown URI "+uri);
         }
         getContext().getContentResolver().notifyChange(uri, null);
+        
         return count;
     }
 
@@ -106,13 +107,12 @@ public class UsageProvider extends ContentProvider {
             getContext().getContentResolver().notifyChange(noteUri, null);
             return noteUri;
         }
-
         throw new SQLException("Failed to insert row into " + uri); 
     }
 
     @Override
     public boolean onCreate() {
-        helper = new DatabaseHelper();
+        helper = new DatabaseHelper(getContext());
         return false;
     }
 

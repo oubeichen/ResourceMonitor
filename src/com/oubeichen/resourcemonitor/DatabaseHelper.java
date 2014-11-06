@@ -1,17 +1,16 @@
 package com.oubeichen.resourcemonitor;
 
-import java.io.File;
+import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.Environment;
+import android.database.sqlite.SQLiteOpenHelper;
 
-public class DatabaseHelper {
+public class DatabaseHelper extends SQLiteOpenHelper {
 
-    public static final String DATABASE_FILE_PATH = Environment
-            .getExternalStorageDirectory().getAbsolutePath();
-    private SQLiteDatabase database;
+    public static final String DBNAME = "resourcemonitor.db"; 
+    public static final int VERSION = 1;
 
-    public DatabaseHelper() {
-        onCreate(getWritableDatabase());
+    public DatabaseHelper(Context context) {
+        super(context, DBNAME, null, VERSION);
     }
 
     public void onCreate(SQLiteDatabase db) {
@@ -24,35 +23,12 @@ public class DatabaseHelper {
         		UsageLog.Camera.TYPE + " INTEGER, " +
         		UsageLog.Camera.TIME + " INTEGER" +
         		")");
-        db.close();
     }
 
-    public void onUpgrade(SQLiteDatabase db) {
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // TODO Auto-generated method stub
         db.execSQL("DROP TABLE IF EXISTS " + UsageLog.Camera.TNAME);
         onCreate(db);
-    }
-
-    /**
-     * clear all usage data
-     */
-    public void clear() {
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("DROP TABLE IF EXISTS " + UsageLog.Camera.TNAME);
-        onCreate(db);
-        db.close();
-    }
-
-    public SQLiteDatabase getReadableDatabase() {
-        database = SQLiteDatabase.openOrCreateDatabase(DATABASE_FILE_PATH
-                + File.separator + UsageLog.DBNAME, null);
-        return database;
-    }
-
-    public SQLiteDatabase getWritableDatabase() {
-        database = SQLiteDatabase.openOrCreateDatabase(DATABASE_FILE_PATH
-                + File.separator + UsageLog.DBNAME, null);
-        return database;
     }
 
 }

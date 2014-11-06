@@ -4,8 +4,6 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 
 public class UsageLog {
-    public static final String DBNAME = "resourcemonitor"; 
-    public static final int VERSION = 1;
     
     public static final String AUTHORITY = "com.oubeichen.resourcemonitor";
 
